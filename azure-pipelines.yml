@@ -9,6 +9,7 @@ steps:
     scannerMode: 'cli'
     configMode: 'manual'
     cliProjectKey: 'sonar-todo-ui'
+    cliProjectName: 'sonar-todo-ui'
     cliSources: '$(System.DefaultWorkingDirectory)'
 
 - task: SonarQubeAnalyze@8
