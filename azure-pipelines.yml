@@ -1,6 +1,5 @@
-trigger: none 
+trigger: none
 pool: my agent pool
-
 
 steps:
 - task: SonarQubePrepare@8
@@ -8,6 +7,8 @@ steps:
     SonarQube: 'ado-sonar-svc'
     scannerMode: 'cli'
     configMode: 'file'
+    extraProperties: |
+      sonar.scanner.skipBranchAnalysis=true
 
 - task: SonarQubeAnalyze@8
   inputs:
@@ -16,6 +17,23 @@ steps:
 - task: SonarQubePublish@8
   inputs:
     pollingTimeoutSec: '300'
+
+
+
+# steps:
+# - task: SonarQubePrepare@8
+#   inputs:
+#     SonarQube: 'ado-sonar-svc'
+#     scannerMode: 'cli'
+#     configMode: 'file'
+
+# - task: SonarQubeAnalyze@8
+#   inputs:
+#     jdkversion: 'JAVA_HOME_17_X64'
+
+# - task: SonarQubePublish@8
+#   inputs:
+#     pollingTimeoutSec: '300'
 
 # - task: NodeTool@0
 #   inputs:
