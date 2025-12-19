@@ -7,10 +7,7 @@ steps:
   inputs:
     SonarQube: 'ado-sonar-svc'
     scannerMode: 'cli'
-    configMode: 'manual'
-    cliProjectKey: 'sonar-todo-ui'
-    cliProjectName: 'sonar-todo-ui'
-    cliSources: '$(System.DefaultWorkingDirectory)'
+    configMode: 'file'
 
 - task: SonarQubeAnalyze@8
   inputs:
