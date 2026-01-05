@@ -1,28 +1,41 @@
 trigger: none
 
-pool: my agent pool
+pool:
+  name: my agent pool
+
 stages:
-  - stage: Static_Code_Analysis
-    jobs:
-      - job: SonarQube_Scan
-        displayName: SonarQube_Scan
-        steps: 
-        - task: SonarQubePrepare@8
-          inputs:
-            SonarQube: 'ado-sonar-svc'
-            scannerMode: 'cli'
-            configMode: 'manual'
-            cliProjectKey: 'todo-ui-001'
-            cliProjectName: 'todo-ui-001'
-            cliSources: '.'
-            extraProperties: |
-              sonar.branch.name=
+- stage: Static_Code_Analysis
+  displayName: Static Code Analysis
+  jobs:
+  - job: SonarQube_Scan
+    displayName: SonarQube Scan
+    steps:
 
-        - task: SonarQubeAnalyze@8
-          inputs:
-            jdkversion: 'JAVA_HOME_17_X64'
+    # ----------------------------
+    # SonarQube Prepare
+    # ----------------------------
+    - task: SonarQubePrepare@8
+      displayName: Prepare SonarQube Analysis
+      inputs:
+        SonarQube: 'ado-sonar-svc'
+        scannerMode: 'cli'
+        configMode: 'manual'
+        cliProjectKey: 'todo-ui-001'
+        cliProjectName: 'todo-ui-001'
+        cliSources: '.'
 
-        - task: SonarQubePublish@8
-          inputs:
-            pollingTimeoutSec: '300'
+    # ----------------------------
+    # SonarQube Analyze
+    # ----------------------------
+    - task: SonarQubeAnalyze@8
+      displayName: Run SonarQube Analysis
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
 
+    # ----------------------------
+    # SonarQube Publish
+    # ----------------------------
+    - task: SonarQubePublish@8
+      displayName: Publish SonarQube Result
+      inputs:
+        pollingTimeoutSec: '300'
