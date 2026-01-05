@@ -1,19 +1,26 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+trigger: none
 
-trigger:
-- main
+pool: my agent pool
+stages:
+  - stage: Static_Code_Analysis
+    jobs:
+      - job: SonarQube_Scan
+        displayName: SonarQube_Scan
+        steps: 
+        - task: SonarQubePrepare@8
+          inputs:
+            SonarQube: 'ado-sonar-svc'
+            scannerMode: 'cli'
+            configMode: 'manual'
+            cliProjectKey: 'todo-ui-001'
+            cliProjectName: 'todo-ui-001'
+            cliSources: '.'
 
-pool:
-  vmImage: ubuntu-latest
+        - task: SonarQubeAnalyze@8
+          inputs:
+            jdkversion: 'JAVA_HOME_17_X64'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+        - task: SonarQubePublish@8
+          inputs:
+            pollingTimeoutSec: '300'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
